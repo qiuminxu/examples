@@ -350,8 +350,6 @@ def input_fn(is_training,
       cycle_length=10,
       num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
-  dataset = dataset.interleave(tf.data.TFRecordDataset)
-
   if is_training and training_dataset_cache:
     # Improve training performance when training data is in remote storage and
     # can fit into worker memory.
