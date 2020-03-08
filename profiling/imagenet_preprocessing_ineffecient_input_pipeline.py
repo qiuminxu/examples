@@ -138,10 +138,7 @@ def process_record_dataset(dataset,
   # allows DistributionStrategies to adjust how many batches to fetch based
   # on how many devices are present.
 
-  # BEGIN_DEOPTIMIZE
-  # Remove the prefetch
-  # dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
-  # END_DEOPTIMIZE
+  dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
 
   options = tf.data.Options()
   options.experimental_slack = tf_data_experimental_slack
@@ -348,13 +345,10 @@ def input_fn(is_training,
   # parallel. You may want to increase this number if you have a large number of
   # CPU cores.
 
-  # BEGIN_DEOPTIMIZE
-  # Deoptimization by removing cycle length and data autotining
-  # dataset = dataset.interleave(
-  #    tf.data.TFRecordDataset,
-  #    cycle_length=10,
-  #    num_parallel_calls=tf.data.experimental.AUTOTUNE)
-  # END_DEOPTIMIZE
+  dataset = dataset.interleave(
+      tf.data.TFRecordDataset,
+      cycle_length=10,
+      num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
   dataset = dataset.interleave(tf.data.TFRecordDataset)
 
